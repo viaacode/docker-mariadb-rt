@@ -43,17 +43,11 @@ EOF
         exec docker-entrypoint.sh $MYSQLOPTS --skip-networking 2>&1 
     }
 
-    coproc timeout {
-        sleep 7200 &&
-        echo "$(date '+%m/%d %H:%M:%S'): Timeout during init" >&4 &&
-        kill $tailcop_PID 
-    } 4>&2
-
     exec 3<&${tailcop[0]}
 
     while read -ru 3 line; do
         echo $line
-        [ $(expr "$line" : 'MySQL init process done. Ready for start up.') -gt 0 ] && break
+        [ $(expr "$line" : '.*MariaDB init process done. Ready for start up.') -gt 0 ] && break
     done
 
     while read -ru 3 line; do
@@ -64,12 +58,7 @@ EOF
     # Keep reading and showing myqld messages
     cat <&3 &
 
-    # Init completed, kill the timeout killer
-    [ -n "$timeout_PID" ] && kill $timeout_PID
-
     echo "$(date '+%m/%d %H:%M:%S'): Shutting down MySQL Server"
     [ -n "$tailcop_PID" ] && kill $tailcop_PID && wait $tailcop_PID
-else
-    # Delegate control to docker-entrypoint.sh
-    exec /usr/local/bin/docker-entrypoint.sh $MYSQLOPTS 
 fi
+exec /usr/local/bin/docker-entrypoint.sh $MYSQLOPTS

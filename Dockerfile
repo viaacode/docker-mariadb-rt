@@ -5,11 +5,12 @@
 FROM mariadb:10.3
 MAINTAINER Herwig Bogaert
 
-ARG RecoveryAreaGid=4
+ARG RecoveryAreaGid
 
 RUN apt-get update && apt-get install -y file socat && rm -rf /var/lib/apt/lists/*
 
 # Grant the mysql user permission to manipulate the recovered files
+RUN groupadd -g $RecoveryAreaGid recovery
 RUN usermod -G $RecoveryAreaGid mysql
 ENV MYSQL_RANDOM_ROOT_PASSWORD true
 
@@ -21,3 +22,5 @@ COPY load.sh /usr/local/bin/
 
 ENV RecoveryArea /recovery_area
 ENV RecoverySocket "unix:/recovery_socket"
+
+USER mysql

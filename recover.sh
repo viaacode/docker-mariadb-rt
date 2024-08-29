@@ -118,8 +118,6 @@ EOF
     # Shutdown
     echo "$(date '+%m/%d %H:%M:%S'): Shutting down MySQL Server"
     [ -n "$tailcop_PID" ] && kill $tailcop_PID && wait $tailcop_PID
-    exit 0
-else
-    # Delegate control to the docker-io/mysql container implementation
-    exec /usr/local/bin/docker-entrypoint.sh mysqld
 fi
+# Delegate control to the docker-io/mysql container implementation
+exec /usr/local/bin/docker-entrypoint.sh mysqld
