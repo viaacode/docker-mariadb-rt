@@ -22,4 +22,5 @@ COPY load.sh /usr/local/bin/
 ENV RecoveryArea /recovery_area
 ENV RecoverySocket "unix:/recovery_socket"
 
-USER mysql
+#TODO
+#USER mysql

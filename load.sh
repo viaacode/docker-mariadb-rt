@@ -26,7 +26,8 @@ if [ ! -r $DUMPBASE.sql* ] ; then
     cat <<EOF | socat -,ignoreeof $RecoverySocket
     { \
         "client": "$HOSTNAME", \
-        "path": "$ORIGDUMP" \
+        "path": "$ORIGDUMP", \
+        "uid": "$(id -u)" \
     }
 EOF
     [ -r $DUMPFILE ] || exit 5
