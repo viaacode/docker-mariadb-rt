@@ -53,7 +53,7 @@ EOF
 
     while read -ru 3 line; do
         echo $line
-        [ $(expr "$line" : '.*\[Note\] mysqld: ready for connections.') -gt 0 ] && break
+        [ $(expr "$line" : '.*\[Note\] m\w*d: ready for connections.') -gt 0 ] && break
     done
 
     # Keep reading and showing myqld messages

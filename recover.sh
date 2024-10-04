@@ -60,7 +60,7 @@ EOF
     while read -ru 3 line; do
      echo $line
      [ $(expr "$line" : '.*InnoDB: .* started; log sequence number') -gt 0 ] && echo $line >>$Report
-     [ $(expr "$line" : '.*\[Note\] mysqld: ready for connections.') -gt 0 ] && break
+     [ $(expr "$line" : '.*\[Note\] m\w*d: ready for connections.') -gt 0 ] && break
     done
 
     # Display output of mysqld during recovery
